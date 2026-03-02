@@ -2,7 +2,7 @@ import sys
 import os
 
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QVBoxLayout, QWidget, QLineEdit, \
+from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton,QVBoxLayout, QWidget, QLineEdit, \
     QGridLayout
 
 
@@ -153,21 +153,37 @@ class MainWindow(QMainWindow):
         self.display.setText(self.output)
 
     def calculate(self):
-        if self.operator == "/" :
-            if float(self.num2) != 0:
-                self.calculated = float(self.num1) / float(self.num2)
-            else:
+        try:
+            num1 = float(self.num1) if self.num1 else 0.0
+            num2 = float(self.num2) if self.num2 else 0.0
+        except ValueError:
+            self.clear()
+            self.display.setText("Error: Invalid input")
+            return
+
+        if self.operator == "/":
+            if num2 == 0:
                 self.clear()
                 self.display.setText("Error: Division by zero")
                 return
-        elif self.operator == "*" :
-            self.calculated = float(self.num1) * float(self.num2)
-        elif self.operator == "+" :
-            self.calculated = float(self.num1) + float(self.num2)
-        elif self.operator == "-" :
-            self.calculated = float(self.num1) - float(self.num2)
+            self.calculated = num1 / num2
+        elif self.operator == "*":
+            self.calculated = num1 * num2
+        elif self.operator == "+":
+            self.calculated = num1 + num2
+        elif self.operator == "-":
+            self.calculated = num1 - num2
+        else:
+            self.clear()
+            self.display.setText("Error: No operator")
+            return
 
-        self.output = f"{self.num1}{self.operator}{self.num2}={self.calculated}"
+        if self.calculated.is_integer():
+            result = int(self.calculated)
+        else:
+            result = self.calculated
+
+        self.output = f"{self.num1}{self.operator}{self.num2}={result}"
         self.display.setText(self.output)
 
     def clear(self):
