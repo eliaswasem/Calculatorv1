@@ -137,24 +137,27 @@ class MainWindow(QMainWindow):
                 self.output += "-"
                 self.display.setText(self.output)
             else:
+                self.clear()
                 self.display.setText("Error: Invalid operation")
                 return
 
     def dot_pressed(self):
         if not self.operator:
-            self.num1 += "."
-            self.output += "."
-            self.display.setText(self.output)
+            if "." not in self.num1:
+                self.num1 += "."
+                self.output += "."
         else:
-            self.num2 += "."
-            self.output += "."
-            self.display.setText(self.output)
+            if "." not in self.num2:
+                self.num2 += "."
+                self.output += "."
+        self.display.setText(self.output)
 
     def calculate(self):
         if self.operator == "/" :
             if float(self.num2) != 0:
                 self.calculated = float(self.num1) / float(self.num2)
             else:
+                self.clear()
                 self.display.setText("Error: Division by zero")
                 return
         elif self.operator == "*" :
