@@ -138,6 +138,7 @@ class MainWindow(QMainWindow):
                 self.display.setText(self.output)
             else:
                 self.display.setText("Error: Invalid operation")
+                return
 
     def dot_pressed(self):
         if not self.operator:
